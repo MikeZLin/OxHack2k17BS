@@ -1,6 +1,6 @@
 from random import randint
 from random import choice
-#from logic import cell_prob
+from logic import cell_prob
 import numpy as np
 
 
@@ -10,14 +10,12 @@ def calculateMove(gamestate):
         move = deployRandomly(gamestate)  # Randomly place your ships
     else:  # If we are in the ship hunting round
         # Randomly fire at valid sea targets
-        print_board(gamestate)
-        txtin = input('CR(x,y):')
-
-        row = int(txtin.split(',')[1])
-        column = int(txtin.split(',')[0])
-        #move = getNextMove(gamestate)
-        move = {"Row": chr(row + 64),
-                "Column": (column + 0)}
+        column, row = cell_prob(gamestate)
+        print(column)
+        print(row)
+        move = {"Row": chr(row + 65),
+                "Column": (column + 1)}
+        print(move)
     return move
 
 
