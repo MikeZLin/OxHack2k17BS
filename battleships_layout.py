@@ -247,7 +247,7 @@ class BattleshipsDemoClient(Frame):
 
             self.cancel_game()
 
-            self.bot_id = None
+            self.bot_id = 'housebot-competition'
             self.bot_password = None
             self.clear_game_title_text()
             self.gameActionLabel.config(text="")
@@ -266,7 +266,7 @@ class BattleshipsDemoClient(Frame):
 
         # This means we're logging in
         else:
-            self.bot_id = 'MikeZLin-1'
+            self.bot_id = self.bot_id_entry.get()
             self.bot_password = 'password'
 
             res = self.get_list_of_game_styles()
