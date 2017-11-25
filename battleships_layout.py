@@ -30,7 +30,8 @@ BATTLESHIPS_GAME_TYPE_ID = 51
 GAME_STYLE_LISTBOX_TEXT = '{0} | {1}sat | {2} | Board: {3} | {4}ms | Deals {5} | Percent Land {6} | RandLand {7}'
 
 GAME_STYLE_LISTBOX_TEXT_BUFFER = 4
-GAME_STYLE_LISTBOX_TEXT_LEN = len(GAME_STYLE_LISTBOX_TEXT) + GAME_STYLE_LISTBOX_TEXT_BUFFER
+GAME_STYLE_LISTBOX_TEXT_LEN = len(
+    GAME_STYLE_LISTBOX_TEXT) + GAME_STYLE_LISTBOX_TEXT_BUFFER
 
 GAME_STYLE_LISTBOX_ACTIVE_STYLE = 'none'
 
@@ -43,7 +44,8 @@ ENABLED = 'normal'
 class BattleshipsDemoClient(Frame):
     def __init__(self, tk, args):
         Frame.__init__(self, tk)
-        locale.setlocale(locale.LC_ALL, '')  # empty string for platform's default settings
+        # empty string for platform's default settings
+        locale.setlocale(locale.LC_ALL, '')
         self.master = tk
         tk.title(APP_TITLE)
         tk.resizable(False, False)
@@ -96,32 +98,39 @@ class BattleshipsDemoClient(Frame):
         self.passwordLabel = Label(self.topFrame, text="Password:")
         self.bot_password_entry = Entry(self.topFrame, show='*')
         self.bot_password_entry.bind('<Return>', self.log_in_if_not)
-        self.log_in_out_button = Button(self.topFrame, text="Login", command=self.log_in_out_clicked)
+        self.log_in_out_button = Button(
+            self.topFrame, text="Login", command=self.log_in_out_clicked)
 
         self.balanceLabel = Label(self.topFrame, text="Bot Balance:")
         self.balance = Label(self.topFrame, text="0")
-        self.close_button = Button(self.topFrame, text="Close", padx=2, command=tk.destroy)
+        self.close_button = Button(
+            self.topFrame, text="Close", padx=2, command=tk.destroy)
 
         # Middle Frame Elements
         # Middle Frame LEFT Elements
-        self.gameStyleLabel = Label(self.middleFrameLeft, font=(None, 18), pady=0, text="Game Style Selection")
+        self.gameStyleLabel = Label(self.middleFrameLeft, font=(
+            None, 18), pady=0, text="Game Style Selection")
 
-        self.opponentLabel = Label(self.middleFrameLeft, text="Specify Opponent (optional):")
+        self.opponentLabel = Label(
+            self.middleFrameLeft, text="Specify Opponent (optional):")
         self.specify_opponent_entry = Entry(self.middleFrameLeft)
 
         self.do_not_play_same_user_check = Checkbutton(self.middleFrameLeft,
                                                        text='Don\'t play another bot in same user account as me',
                                                        var=self.do_not_play_same_user)
 
-        self.game_styles_listbox = Listbox(self.middleFrameLeft, background='#FFFFFF', height=8)
-        self.game_styles_listbox.bind('<Double-1>', self.find_game_double_clicked)
+        self.game_styles_listbox = Listbox(
+            self.middleFrameLeft, background='#FFFFFF', height=8)
+        self.game_styles_listbox.bind(
+            '<Double-1>', self.find_game_double_clicked)
         self.game_styles_listbox.bind('<Return>',
                                       self.find_game_double_clicked)  # Not a double click but we want it to do the same thing
 
         self.refresh_game_styles_button = Button(self.middleFrameLeft, text="Refresh Game Styles",
                                                  command=self.refresh_game_styles_clicked)
 
-        self.thinkingTimeLabel = Label(self.middleFrameLeft, text="Add \"Thinking Time\" (ms):")
+        self.thinkingTimeLabel = Label(
+            self.middleFrameLeft, text="Add \"Thinking Time\" (ms):")
         self.thinking_time_entry = Entry(self.middleFrameLeft)
 
         self.auto_play_next_game_check = Checkbutton(self.middleFrameLeft, text='Play another game when complete',
@@ -129,7 +138,8 @@ class BattleshipsDemoClient(Frame):
 
         self.cancel_stop_game_button = Button(self.middleFrameLeft, text=CANCEL_GAME_TEXT,
                                               command=self.cancel_stop_game_clicked)
-        self.find_game_button = Button(self.middleFrameLeft, text="Find Game", command=self.find_game_clicked)
+        self.find_game_button = Button(
+            self.middleFrameLeft, text="Find Game", command=self.find_game_clicked)
 
         self.resultText = Message(self.middleFrameLeft, width=300,
                                   text="This is where the informational messages will appear")
@@ -138,10 +148,13 @@ class BattleshipsDemoClient(Frame):
         # Middle Frame RIGHT Elements
 
         self.gameTitleLabel = Label(self.middleFrameRight, text="Game Title")
-        self.gameTitleText = Text(self.middleFrameRight, height=3, background='white', spacing1=3, pady=0)
+        self.gameTitleText = Text(
+            self.middleFrameRight, height=3, background='white', spacing1=3, pady=0)
 
-        self.player = battleships_visuals.BattleshipsVisuals(self.middleFrameRight)  # Game Display Table
-        self.opponent = battleships_visuals.BattleshipsVisuals(self.middleFrameRight)  # Game Display Table
+        self.player = battleships_visuals.BattleshipsVisuals(
+            self.middleFrameRight)  # Game Display Table
+        self.opponent = battleships_visuals.BattleshipsVisuals(
+            self.middleFrameRight)  # Game Display Table
         self.gameActionLabel = Label(self.middleFrameRight, text="")
 
         # ===================================
@@ -179,16 +192,20 @@ class BattleshipsDemoClient(Frame):
         self.opponentLabel.grid(row=2, column=0, sticky=W, pady=4)
         self.specify_opponent_entry.grid(row=2, column=0, sticky=E, pady=4)
 
-        self.do_not_play_same_user_check.grid(row=3, column=0, columnspan=1, sticky='we', pady=4)
-        self.game_styles_listbox.grid(row=4, column=0, columnspan=1, sticky='we', pady=4)
+        self.do_not_play_same_user_check.grid(
+            row=3, column=0, columnspan=1, sticky='we', pady=4)
+        self.game_styles_listbox.grid(
+            row=4, column=0, columnspan=1, sticky='we', pady=4)
         self.find_game_button.grid(row=5, column=0, pady=4, sticky=W)
-        self.refresh_game_styles_button.grid(row=5, column=0, columnspan=1, sticky='', pady=4)
+        self.refresh_game_styles_button.grid(
+            row=5, column=0, columnspan=1, sticky='', pady=4)
         self.cancel_stop_game_button.grid(row=5, column=0, sticky=E)
 
         self.thinkingTimeLabel.grid(row=6, column=0, sticky=W, pady=4)
         self.thinking_time_entry.grid(row=6, column=0, sticky=E, pady=4)
 
-        self.auto_play_next_game_check.grid(row=7, column=0, columnspan=1, sticky=W, pady=4)
+        self.auto_play_next_game_check.grid(
+            row=7, column=0, columnspan=1, sticky=W, pady=4)
         self.resultText.grid(row=9, column=0, columnspan=2, sticky=W, pady=4)
         self.middleFrame.grid_columnconfigure(9, weight=1)
 
@@ -249,8 +266,8 @@ class BattleshipsDemoClient(Frame):
 
         # This means we're logging in
         else:
-            self.bot_id = self.bot_id_entry.get()
-            self.bot_password = self.bot_password_entry.get()
+            self.bot_id = 'MikeZLin-1'
+            self.bot_password = 'password'
 
             res = self.get_list_of_game_styles()
             if res['Result'] == 'SUCCESS':
@@ -270,7 +287,8 @@ class BattleshipsDemoClient(Frame):
                 self.logged_in = True
 
             else:
-                messagebox.showerror('Error', 'Invalid login attempt. Please check the username and password entered.')
+                messagebox.showerror(
+                    'Error', 'Invalid login attempt. Please check the username and password entered.')
 
     def log_in_if_not(self, _):
         if not self.logged_in:
@@ -406,7 +424,8 @@ class BattleshipsDemoClient(Frame):
                 break
 
         self.find_game_button.config(state=ENABLED)
-        self.cancel_stop_game_button.config(state=DISABLED, text=CANCEL_GAME_TEXT)
+        self.cancel_stop_game_button.config(
+            state=DISABLED, text=CANCEL_GAME_TEXT)
         self.game_cancelled = False
 
     def find_game(self):
@@ -438,9 +457,11 @@ class BattleshipsDemoClient(Frame):
         if len(opponent_id) == 0:
             opponent_id = None
         try:
-            game_style_id = self.game_style_ids[int(self.game_styles_listbox.curselection()[0])]
+            game_style_id = self.game_style_ids[int(
+                self.game_styles_listbox.curselection()[0])]
         except IndexError:
-            self.game_styles_listbox.select_set(GAME_STYLE_LISTBOX_DEFAULT_SELECTION)
+            self.game_styles_listbox.select_set(
+                GAME_STYLE_LISTBOX_DEFAULT_SELECTION)
             game_style_id = self.game_style_ids[0]
 
         req = {'BotId': self.bot_id,
@@ -461,7 +482,8 @@ class BattleshipsDemoClient(Frame):
             if self.game_cancelled:
                 self.cancel_game()
                 self.find_game_button.config(state=ENABLED)
-                self.cancel_stop_game_button.config(state=DISABLED, text=CANCEL_GAME_TEXT)
+                self.cancel_stop_game_button.config(
+                    state=DISABLED, text=CANCEL_GAME_TEXT)
                 break
             poll_results = self.poll_for_game_state()
 
@@ -484,9 +506,12 @@ class BattleshipsDemoClient(Frame):
         game_state = poll_results['GameState']
 
         title = format('Game ID: ' + str(game_state['GameId']))
-        game_style_details = self.game_styles_listbox.get('active').split(" | ")
-        title += format(' / Style: ' + str(self.game_style_ids[int(self.game_styles_listbox.curselection()[0])]))
-        title += format(' / Land: ' + game_style_details[6].split(" ")[2] + '%')
+        game_style_details = self.game_styles_listbox.get(
+            'active').split(" | ")
+        title += format(' / Style: ' +
+                        str(self.game_style_ids[int(self.game_styles_listbox.curselection()[0])]))
+        title += format(' / Land: ' +
+                        game_style_details[6].split(" ")[2] + '%')
         title += format(' / Deals: ' + game_style_details[5].split(" ")[1])
         title += format(' / ' + game_style_details[7])
         title += "\n"
@@ -510,7 +535,8 @@ class BattleshipsDemoClient(Frame):
                 if move_results['Result'] == 'INVALID_MOVE':
                     self.resultText.config(text="Invalid Move")
                 elif move_results['Result'] != 'SUCCESS':
-                    self.resultText.config(text='Game has ended: ' + move_results['Result'])
+                    self.resultText.config(
+                        text='Game has ended: ' + move_results['Result'])
                     print("Game ended")
                     break
                 else:
@@ -525,7 +551,8 @@ class BattleshipsDemoClient(Frame):
                 poll_results = self.poll_for_game_state()
 
                 if poll_results['Result'] != 'SUCCESS':
-                    self.resultText.config(text='Game has ended: ' + poll_results['Result'])
+                    self.resultText.config(
+                        text='Game has ended: ' + poll_results['Result'])
                     break
                 game_state = poll_results['GameState']
 
@@ -585,7 +612,8 @@ class BattleshipsDemoClient(Frame):
         self.game_cancelled = True
         self.cancel_game()
         self.find_game_button.config(state=ENABLED)
-        self.cancel_stop_game_button.config(state=DISABLED, text=CANCEL_GAME_TEXT)
+        self.cancel_stop_game_button.config(
+            state=DISABLED, text=CANCEL_GAME_TEXT)
 
     def cancel_game(self):
         if self.player_key is None:
@@ -606,7 +634,8 @@ class BattleshipsDemoClient(Frame):
         """Make an API call."""
         while True:
             try:
-                res = requests.post(url, json=req, headers=API_CALL_HEADERS, timeout=60.0)
+                res = requests.post(
+                    url, json=req, headers=API_CALL_HEADERS, timeout=60.0)
                 try:
                     jres = res.json()
                     if 'Result' in jres:
@@ -639,12 +668,17 @@ def int_with_commas(x):
 
 parser = argparse.ArgumentParser(description='Set optional running parameters')
 parser.add_argument('--botid', default=None, help='log in with this bot name')
-parser.add_argument('--password', default=None, help='log in with this password')
+parser.add_argument('--password', default=None,
+                    help='log in with this password')
 parser.add_argument('--gamestyle', default=None, help='play this gamestyle')
-parser.add_argument('--timeout', default=0, help='have this timeout in milliseconds')
-parser.add_argument('--playanothergame', action='store_true', help='Play another game when complete')
-parser.add_argument('--dontplaysameuserbot', action='store_true', help='Don\'t play another user in the same account')
-parser.add_argument('--closeaftergame', action='store_true', help='Close the client once the game has completed (takes priority over playanothergame)')
+parser.add_argument('--timeout', default=0,
+                    help='have this timeout in milliseconds')
+parser.add_argument('--playanothergame', action='store_true',
+                    help='Play another game when complete')
+parser.add_argument('--dontplaysameuserbot', action='store_true',
+                    help='Don\'t play another user in the same account')
+parser.add_argument('--closeaftergame', action='store_true',
+                    help='Close the client once the game has completed (takes priority over playanothergame)')
 cmd_args = parser.parse_args()
 root = Tk()
 my_gui = BattleshipsDemoClient(root, cmd_args)

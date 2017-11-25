@@ -1,5 +1,6 @@
 from random import randint
 from random import choice
+import numpy as np
 
 
 def calculateMove(gamestate):
@@ -7,7 +8,16 @@ def calculateMove(gamestate):
         # move = exampleShipPlacement()  # Does not take land into account
         move = deployRandomly(gamestate)  # Randomly place your ships
     else:  # If we are in the ship hunting round
-        move = chooseRandomValidTarget(gamestate)  # Randomly fire at valid sea targets
+        # Randomly fire at valid sea targets
+        print_board(gamestate)
+        txtin = str(input('Move (C,R) (X,Y):'))
+        while len(txtin.split(',')) != 2:
+            txtin = str(input('Move (R,C):'))
+        row = int(txtin.split(',')[1])
+        column = int(txtin.split(',')[0])
+        #move = chooseRandomValidTarget(gamestate)
+        move = {"Row": chr(row + 64),
+                "Column": (column + 0)}
     return move
 
 # =============================================================================
@@ -15,6 +25,18 @@ def calculateMove(gamestate):
 # time to understand the environment and to get a game running as short as
 # possible. The code also serves as an example of how to manipulate the myBoard
 # and oppBoard.
+
+
+def print_board(gamestate):
+
+    board = np.asarray(gamestate['OppBoard'])
+    cells = []
+    for i in range(8):
+        cells.append(str(i + 1))
+    row_format = "{:>4}" * (len(cells) + 1)
+    print(row_format.format("", *cells))
+    for team, row in zip(cells, board):
+        print(row_format.format(team, *row))
 
 
 def exampleShipPlacement():
@@ -25,33 +47,33 @@ def exampleShipPlacement():
     # This function does not check for any land and, so, should be used
     # with a gamestyle that does not include land.
     move = {"Placement": [
-                  {
-                    "Row": "A",
-                    "Column": 1,
-                    "Orientation": "H"
-                  },
-                  {
-                    "Row": "B",
-                    "Column": 6,
-                    "Orientation": "V"
-                  },
-                  {
-                    "Row": "C",
-                    "Column": 1,
-                    "Orientation": "H"
-                  },
-                  {
-                    "Row": "D",
-                    "Column": 1,
-                    "Orientation": "H"
-                  },
-                  {
-                    "Row": "E",
-                    "Column": 1,
-                    "Orientation": "V"
-                  }
-               ]
-            }
+        {
+            "Row": "A",
+            "Column": 1,
+            "Orientation": "H"
+        },
+        {
+            "Row": "B",
+            "Column": 6,
+            "Orientation": "V"
+        },
+        {
+            "Row": "C",
+            "Column": 1,
+            "Orientation": "H"
+        },
+        {
+            "Row": "D",
+            "Column": 1,
+            "Orientation": "H"
+        },
+        {
+            "Row": "E",
+            "Column": 1,
+            "Orientation": "V"
+        }
+    ]
+    }
     return move
 
 
@@ -61,13 +83,17 @@ def deployRandomly(gamestate):
     orientation = None
     row = None
     column = None
-    for i in range(len(gamestate["Ships"])):  # For every ship that needs to be deployed
+    # For every ship that needs to be deployed
+    for i in range(len(gamestate["Ships"])):
         deployed = False
         while not deployed:  # Keep randomly choosing locations until a valid one is chosen
-            row = randint(0, len(gamestate["MyBoard"]) - 1)  # Randomly pick a row
-            column = randint(0, len(gamestate["MyBoard"][0]) - 1)  # Randomly pick a column
+            # Randomly pick a row
+            row = randint(0, len(gamestate["MyBoard"]) - 1)
+            # Randomly pick a column
+            column = randint(0, len(gamestate["MyBoard"][0]) - 1)
             orientation = choice(["H", "V"])  # Randomly pick an orientation
-            if deployShip(row, column, gamestate["MyBoard"], gamestate["Ships"][i], orientation, i):  # If ship can be successfully deployed to that location...
+            # If ship can be successfully deployed to that location...
+            if deployShip(row, column, gamestate["MyBoard"], gamestate["Ships"][i], orientation, i):
                 deployed = True  # ...then the ship has been deployed
         move.append({"Row": chr(row + 65), "Column": (column + 1),
                      "Orientation": orientation})  # Add the valid deployment location to the list of deployment locations in move
@@ -77,7 +103,8 @@ def deployRandomly(gamestate):
 # Returns whether given location can fit given ship onto given board and, if it can, updates the given board with that ships position
 def deployShip(i, j, board, length, orientation, ship_num):
     if orientation == "V":  # If we are trying to place ship vertically
-        if i + length - 1 >= len(board):  # If ship doesn't fit within board boundaries
+        # If ship doesn't fit within board boundaries
+        if i + length - 1 >= len(board):
             return False  # Ship not deployed
         for l in range(length):  # For every section of the ship
             if board[i + l][j] != "":  # If there is something on the board obstructing the ship
@@ -85,7 +112,8 @@ def deployShip(i, j, board, length, orientation, ship_num):
         for l in range(length):  # For every section of the ship
             board[i + l][j] = str(ship_num)  # Place the ship on the board
     else:  # If we are trying to place ship horizontally
-        if j + length - 1 >= len(board[0]):  # If ship doesn't fit within board boundaries
+        # If ship doesn't fit within board boundaries
+        if j + length - 1 >= len(board[0]):
             return False  # Ship not deployed
         for l in range(length):  # For every section of the ship
             if board[i][j + l] != "":  # If there is something on the board obstructing the ship
@@ -102,8 +130,10 @@ def chooseRandomValidTarget(gamestate):
     column = None
     while not valid:  # Keep randomly choosing targets until a valid one is chosen
         row = randint(0, len(gamestate["MyBoard"]) - 1)  # Randomly pick a row
-        column = randint(0, len(gamestate["MyBoard"][0]) - 1)  # Randomly pick a column
-        if gamestate["OppBoard"][row][column] == "":  # If the target is sea that hasn't already been guessed...
+        # Randomly pick a column
+        column = randint(0, len(gamestate["MyBoard"][0]) - 1)
+        # If the target is sea that hasn't already been guessed...
+        if gamestate["OppBoard"][row][column] == "":
             valid = True  # ...then the target is valid
     move = {"Row": chr(row + 65),
             "Column": (column + 1)}  # Set move equal to the valid target (convert the row to a letter 0->A, 1->B etc.)
@@ -115,14 +145,20 @@ def shipsStillAfloat(gamestate):
     afloat = []
     ships_removed = []
     for k in range(len(gamestate["Ships"])):  # For every ship
-        afloat.append(gamestate["Ships"][k])  # Add it to the list of afloat ships
-        ships_removed.append(False)  # Set its removed from afloat list to false
+        # Add it to the list of afloat ships
+        afloat.append(gamestate["Ships"][k])
+        # Set its removed from afloat list to false
+        ships_removed.append(False)
     for i in range(len(gamestate["OppBoard"])):
-        for j in range(len(gamestate["OppBoard"][0])):  # For every grid on the board
+        # For every grid on the board
+        for j in range(len(gamestate["OppBoard"][0])):
             for k in range(len(gamestate["Ships"])):  # For every ship
-                if str(k) in gamestate["OppBoard"][i][j] and not ships_removed[k]:  # If we can see the ship number on our opponent's board and we haven't already removed it from the afloat list
-                    afloat.remove(gamestate["Ships"][k])  # Remove that ship from the afloat list (we can only see an opponent's ship number when the ship has been sunk)
-                    ships_removed[k] = True  # Record that we have now removed this ship so we know not to try and remove it again
+                # If we can see the ship number on our opponent's board and we haven't already removed it from the afloat list
+                if str(k) in gamestate["OppBoard"][i][j] and not ships_removed[k]:
+                    # Remove that ship from the afloat list (we can only see an opponent's ship number when the ship has been sunk)
+                    afloat.remove(gamestate["Ships"][k])
+                    # Record that we have now removed this ship so we know not to try and remove it again
+                    ships_removed[k] = True
     return afloat  # Return the list of ships still afloat
 
 
@@ -131,11 +167,13 @@ def selectUntargetedAdjacentCell(row, column, oppBoard):
     adjacent = []  # List of adjacent cells
     if row > 0 and oppBoard[row - 1][column] == "":  # If there is a cell above
         adjacent.append((row - 1, column))  # Add to list of adjacent cells
-    if row < len(oppBoard) - 1 and oppBoard[row + 1][column] == "":  # If there is a cell below
+    # If there is a cell below
+    if row < len(oppBoard) - 1 and oppBoard[row + 1][column] == "":
         adjacent.append((row + 1, column))  # Add to list of adjacent cells
     if column > 0 and oppBoard[row][column - 1] == "":  # If there is a cell left
         adjacent.append((row, column - 1))  # Add to list of adjacent cells
-    if column < len(oppBoard[0]) - 1 and oppBoard[row][column + 1] == "":  # If there is a cell right
+    # If there is a cell right
+    if column < len(oppBoard[0]) - 1 and oppBoard[row][column + 1] == "":
         adjacent.append((row, column + 1))  # Add to list of adjacent cells
     return adjacent
 
